@@ -5,9 +5,9 @@ type TextInputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInpu
     label: string;
 };
 
-export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ label, className, type, ...props }, ref) => {
+export const RadioInput = forwardRef<HTMLInputElement, TextInputProps>(({ label, className, type, ...props }, ref) => {
     return (
-        <div className={className}>
+        <div className={classNames('relative flex gap-x-3 items-center', className)}>
             <input
                 id="push-everything"
                 name="push-notifications"
@@ -23,4 +23,4 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(({ label, 
     );
 });
 
-TextInput.displayName = 'RadioInput';
+RadioInput.displayName = 'RadioInput';
