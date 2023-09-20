@@ -235,7 +235,7 @@ export default function Home() {
                                         label="Previous Given name(s)"
                                         {...register('previous_given_name')}
                                         className="col-span-3"
-                                        autoComplete=""
+                                        autoComplete="off"
                                         errors={errors.previous_given_name}
                                     />
                                     <TextInput
@@ -243,7 +243,7 @@ export default function Home() {
                                         label="Previous Family name"
                                         {...register('previous_family_name')}
                                         className="col-span-3"
-                                        autoComplete=""
+                                        autoComplete="off"
                                         errors={errors.previous_family_name}
                                     />
 
