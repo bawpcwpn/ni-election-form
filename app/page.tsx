@@ -13,7 +13,9 @@ interface ElectionFormInputs {
     current_family_name: string;
     previous_given_name?: string;
     previous_family_name?: string;
-    date_of_birth: string;
+    dob_day: string;
+    dob_month: string;
+    dob_year: string;
     current_address_1: string;
     current_address_2?: string;
     current_state?: string;
@@ -170,14 +172,33 @@ export default function Home() {
                                         className="sm:col-span-3"
                                     />
 
-                                    <TextInput
-                                        id="dob"
-                                        type="date"
-                                        label="Date of Birth"
-                                        autoComplete="bday"
-                                        {...register('date_of_birth')}
-                                        className="sm:col-span-3"
-                                    />
+                                    <div className="col-span-2">
+                                        <fieldset>
+                                            <legend className="text-sm font-semibold leading-6 text-gray-900">
+                                                Date of birth
+                                            </legend>
+                                            <div className="flex items-center gap-x-3">
+                                                <TextInput
+                                                    id="dob_day"
+                                                    label="Day"
+                                                    autoComplete="bday-day"
+                                                    {...register('dob_day', { required: true })}
+                                                />
+                                                <TextInput
+                                                    id="dob_month"
+                                                    label="Month"
+                                                    autoComplete="bday-month"
+                                                    {...register('dob_month', { required: true })}
+                                                />
+                                                <TextInput
+                                                    id="dob_year"
+                                                    label="Year"
+                                                    autoComplete="bday-year"
+                                                    {...register('dob_year', { required: true })}
+                                                />
+                                            </div>
+                                        </fieldset>
+                                    </div>
                                 </div>
                             </div>
 
