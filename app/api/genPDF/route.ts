@@ -5,7 +5,7 @@ import { ElectionFormInputs } from '@/app/page';
 export async function POST(request: Request) {
     try {
         const clonedRequest = request.clone();
-        const body = (await clonedRequest.json()) as ElectionFormInputs;
+        const body = (await clonedRequest.json()) as ElectionFormInputs & { signature: string };
 
         // Load the PDF from the local filesystem
         const pdfPath = path.join(process.cwd(), 'public', 'Enrolment-Form-NIGC-2023.pdf');
@@ -100,6 +100,18 @@ export async function POST(request: Request) {
                 evidence.select(evidenceOptions[2]);
                 break;
         }
+
+        const signatureImage = Buffer.from(body.signature.split(',')[1], 'base64');
+        const signatureImageEmbed = await pdfDoc.embedPng(signatureImage);
+        const { width, height } = signatureImageEmbed.scale(0.5); // scale as needed
+        const page = pdfDoc.getPage(1);
+        // Position the signature on the page (adjust x, y coordinates as needed)
+        page.drawImage(signatureImageEmbed, {
+            x: 400,
+            y: 70,
+            width,
+            height,
+        });
 
         const currentDate = new Date();
         const formattedDate = `${String(currentDate.getDate()).padStart(2, '0')}/${String(

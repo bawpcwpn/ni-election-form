@@ -5,7 +5,8 @@ import { TextInput } from '@/components/TextInput';
 import { RadioInput } from '@/components/RadioInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { FieldError } from '@/components/FieldError';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import SignatureCanvas from 'react-signature-canvas';
 
 export interface ElectionFormInputs {
     voting_method?: 'in_person' | 'online';
@@ -48,22 +49,30 @@ export default function Home() {
             current_postal_address_postcode: 2899,
         },
     });
+    const sigCanvas = React.useRef<any>(null);
 
     const fields = watch();
 
     const onSubmit: SubmitHandler<ElectionFormInputs> = async (data) => {
+        if (sigCanvas.current.isEmpty()) {
+            setServerError('You must sign the form.');
+        }
         if (submitting) {
             return;
         }
         try {
             setSubmitting(true);
             setServerError('');
+            const signature = sigCanvas.current.toDataURL();
             const response = await fetch('/api/genPDF', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                    ...data,
+                    signature,
+                }),
             });
             if (response.status !== 200) {
                 throw {
@@ -84,6 +93,10 @@ export default function Home() {
         } finally {
             setSubmitting(false);
         }
+    };
+
+    const clearSignature = () => {
+        sigCanvas.current.clear();
     };
 
     return (
@@ -412,6 +425,32 @@ export default function Home() {
                                     </fieldset>
                                 </div>
                             </div>
+                            <div>
+                                <div className="mt-10">
+                                    <div>
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                                            Signature
+                                        </label>
+                                        <p className="text-sm text-gray-600 mb-2">
+                                            Draw in the box below to record your signature.
+                                        </p>
+                                        <div className="border border-gray-900/10 rounded overflow-hidden bg-white w-[350px] h-[100px]">
+                                            <SignatureCanvas
+                                                ref={sigCanvas}
+                                                canvasProps={{ width: 350, height: 100 }}
+                                                backgroundColor={`rgba(255,255,255,1)`}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="inline-block text-xs mt-1 border-gray-400 border rounded text-gray-700 p-1 bg-white hover:border-green-500 hover:text-white hover:bg-green-500 transition-all duration-200"
+                                            onClick={() => clearSignature()}
+                                        >
+                                            Clear Signature
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {serverError && (
@@ -422,7 +461,7 @@ export default function Home() {
                             </div>
                         )}
 
-                        <div className="mt-6 flex items-center justify-end gap-x-6">
+                        <div className="mt-20 flex items-center justify-end gap-x-6">
                             <button
                                 type="reset"
                                 className="text-sm font-semibold leading-6 text-gray-900"
