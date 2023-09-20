@@ -103,13 +103,13 @@ export default function Home() {
         <main className="flex min-h-screen flex-col items-center justify-between">
             <div className="flex min-h-full flex-col justify-start px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-screen-sm">
-                    <h1 className="text-center text-4xl text-green-700 font-bold leading-9 tracking-tight">
+                    <h1 className="sm:text-center text-4xl text-green-700 font-bold leading-9 tracking-tight">
                         Norfolk Island Governance Committee Community Representatives Election
                     </h1>
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                    <h2 className="mt-10 sm:text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Enrol to Vote
                     </h2>
-                    <p className="mt-10 text-center text-sm text-gray-500">
+                    <p className="mt-10 sm:text-center text-sm text-gray-500">
                         Fill in the form below to download a pre-filled & signed PDF form to enrol to vote. <br />
                         You can then email it to{' '}
                         <Link
@@ -130,7 +130,7 @@ export default function Home() {
                                 {errors.voting_method && <FieldError>You must select one of the below.</FieldError>}
                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="col-span-full">
-                                        <fieldset className="flex gap-x-3 items-center">
+                                        <fieldset className="flex-col sm:flex-row gap-y-3 flex gap-x-3 items-center">
                                             <RadioInput
                                                 id="in_person"
                                                 label="I want to vote in-person by pre-poll or at the polling booth on election day"
@@ -152,12 +152,12 @@ export default function Home() {
                             <div className="border-b border-gray-900/10 pb-12">
                                 <h2 className="text-base font-semibold leading-7 text-gray-900">Your details</h2>
                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                    <div className="col-span-full">
+                                    <div className="col-span-3 sm:col-span-full">
                                         <fieldset>
                                             <legend className="text-sm font-semibold leading-6 text-gray-900">
                                                 Title
                                             </legend>
-                                            <div className="flex gap-x-3 items-center">
+                                            <div className="flex-wrap sm:no-wrap gap-y-3 flex gap-x-3 items-center">
                                                 <RadioInput
                                                     id="mr"
                                                     label="Mr"
@@ -216,7 +216,7 @@ export default function Home() {
                                         label="Given name(s)"
                                         autoComplete="given-name"
                                         {...register('current_given_name')}
-                                        className="sm:col-span-3"
+                                        className="col-span-3"
                                         required
                                         errors={errors.current_given_name}
                                     />
@@ -225,7 +225,7 @@ export default function Home() {
                                         label="Family name"
                                         autoComplete="family-name"
                                         {...register('current_family_name')}
-                                        className="sm:col-span-3"
+                                        className="col-span-3"
                                         required
                                         errors={errors.current_family_name}
                                     />
@@ -234,7 +234,7 @@ export default function Home() {
                                         id="previous_given_name"
                                         label="Previous Given name(s)"
                                         {...register('previous_given_name')}
-                                        className="sm:col-span-3"
+                                        className="col-span-3"
                                         autoComplete=""
                                         errors={errors.previous_given_name}
                                     />
@@ -242,7 +242,7 @@ export default function Home() {
                                         id="previous_family_name"
                                         label="Previous Family name"
                                         {...register('previous_family_name')}
-                                        className="sm:col-span-3"
+                                        className="col-span-3"
                                         autoComplete=""
                                         errors={errors.previous_family_name}
                                     />
@@ -382,7 +382,7 @@ export default function Home() {
                                     <TextInput
                                         id="email"
                                         type="email"
-                                        className="col-span-full"
+                                        className="col-span-3 sm:col-span-full"
                                         label="Email address"
                                         autoComplete="email"
                                         errors={errors.email}
