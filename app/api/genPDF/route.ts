@@ -16,10 +16,6 @@ export async function POST(request: Request) {
         // Acquire form from loaded PDF
         const form = pdfDoc.getForm();
 
-        const fields = form.getFields();
-        const fieldNames = fields.map((f) => f.getName());
-        console.log(fieldNames);
-
         const votingMethod = form.getRadioGroup('Voting Method');
         const vmOptions = votingMethod.getOptions();
         votingMethod.select(body.voting_method === 'in_person' ? vmOptions[0] : vmOptions[1]);
@@ -114,8 +110,6 @@ export async function POST(request: Request) {
 
         try {
             const filledPdfBytes = await pdfDoc.save();
-
-            console.log(filledPdfBytes);
 
             return new Response(filledPdfBytes, {
                 status: 200,
