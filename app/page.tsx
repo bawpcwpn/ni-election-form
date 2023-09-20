@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { TextInput } from '@/components/TextInput';
 import { RadioInput } from '@/components/RadioInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { FieldError } from '@/components/FieldError';
+import { useState } from 'react';
 
 interface ElectionFormInputs {
     voting_method?: 'in_person' | 'online';
@@ -31,6 +33,7 @@ interface ElectionFormInputs {
 }
 
 export default function Home() {
+    const [serverError, setServerError] = useState<string>('');
     const {
         register,
         handleSubmit,
@@ -47,7 +50,21 @@ export default function Home() {
 
     const fields = watch();
 
-    const onSubmit: SubmitHandler<ElectionFormInputs> = async (data) => {};
+    const onSubmit: SubmitHandler<ElectionFormInputs> = async (data) => {
+        try {
+            setServerError('');
+            const response = await fetch('/api/genPDF', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+        } catch (e) {
+            console.error(e);
+            setServerError('An error occurred while generating your form. Please try again later.');
+        }
+    };
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between">
@@ -77,6 +94,7 @@ export default function Home() {
                         <div className="space-y-12">
                             <div className="border-b border-gray-900/10 pb-12">
                                 <h2 className="text-base font-semibold leading-7 text-gray-900">Voting Method</h2>
+                                {errors.voting_method && <FieldError>You must select one of the below.</FieldError>}
                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="col-span-full">
                                         <fieldset className="flex gap-x-3 items-center">
@@ -157,6 +175,7 @@ export default function Home() {
                                                     {...register('title_other', { required: fields.title === 'Other' })}
                                                 />
                                             </div>
+                                            {errors.title && <FieldError>You must select a title.</FieldError>}
                                         </fieldset>
                                     </div>
                                     <TextInput
@@ -183,6 +202,7 @@ export default function Home() {
                                         label="Previous Given name(s)"
                                         {...register('previous_given_name')}
                                         className="sm:col-span-3"
+                                        autoComplete=""
                                         errors={errors.previous_given_name}
                                     />
                                     <TextInput
@@ -190,6 +210,7 @@ export default function Home() {
                                         label="Previous Family name"
                                         {...register('previous_family_name')}
                                         className="sm:col-span-3"
+                                        autoComplete=""
                                         errors={errors.previous_family_name}
                                     />
 
@@ -344,6 +365,7 @@ export default function Home() {
                                         <legend className="text-sm font-semibold leading-6 text-gray-900">
                                             Evidence of your identity, age and residency
                                         </legend>
+                                        {errors.evidence && <FieldError>You must select one of the below.</FieldError>}
                                         <div className="mt-6 space-y-6">
                                             <RadioInput
                                                 id="photo_id"
@@ -371,6 +393,14 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
+
+                        {serverError && (
+                            <div className="mt-6">
+                                <div className="bg-red-50 rounded text-sm text-red-600 py-2 px-3 border border-red-600">
+                                    {serverError}
+                                </div>
+                            </div>
+                        )}
 
                         <div className="mt-6 flex items-center justify-end gap-x-6">
                             <button type="reset" className="text-sm font-semibold leading-6 text-gray-900">

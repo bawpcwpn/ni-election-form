@@ -9,10 +9,10 @@ export const RadioInput = forwardRef<HTMLInputElement, TextInputProps>(({ label,
     return (
         <div className={classNames('relative flex gap-x-3 items-center', className)}>
             <input
-                id="push-everything"
-                name="push-notifications"
+                ref={ref}
                 type="radio"
                 className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"
+                {...props}
             />
             {label && (
                 <label htmlFor={props?.id || props.name} className="block text-sm font-medium leading-6 text-gray-900">
