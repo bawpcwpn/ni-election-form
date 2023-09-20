@@ -416,7 +416,7 @@ export default function Home() {
                                             />
                                             <RadioInput
                                                 id="stat_dec"
-                                                label="A statutory declaration made by a person who can attest to the residential address, length of residency on Norfolk Island, and date of birth of the person who does not have the identification listed in (a) or (b) above."
+                                                label="(c) A statutory declaration made by a person who can attest to the residential address, length of residency on Norfolk Island, and date of birth of the person who does not have the identification listed in (a) or (b) above."
                                                 {...register('evidence', { required: true })}
                                                 required
                                                 value="stat_dec"
