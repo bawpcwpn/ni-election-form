@@ -34,6 +34,7 @@ export interface ElectionFormInputs {
 }
 
 export default function Home() {
+    const [blobURL, setBlobURL] = useState<string>('');
     const [submitting, setSubmitting] = useState<boolean>(false);
     const [serverError, setServerError] = useState<string>('');
     const {
@@ -82,6 +83,7 @@ export default function Home() {
             }
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
+            setBlobURL(url);
             const a = document.createElement('a');
             a.href = url;
             a.target = '_blank'; // Open in a new window
@@ -527,6 +529,18 @@ export default function Home() {
                                 {submitting ? 'Loading...' : 'Download Form'}
                             </Button>
                         </div>
+                        {blobURL && (
+                            <div className="text-center mt-4">
+                                PDF didn&apos;t open?{' '}
+                                <Link
+                                    className="text-green-600 underline hover:no-underline"
+                                    href={blobURL}
+                                    target="_blank"
+                                >
+                                    Click here.
+                                </Link>
+                            </div>
+                        )}
                     </form>
                 </div>
             </div>
