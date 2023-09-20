@@ -114,7 +114,7 @@ export default function Home() {
                         You can then email it to{' '}
                         <Link
                             className="text-green-500 underline hover:no-underline"
-                            href="mailto:norfolk.ro@austelect.com&subject=Enrollment%20Form"
+                            href="mailto:norfolk.ro@austelect.com?subject=Enrolment%20Form"
                         >
                             norfolk.ro@austelect.com
                         </Link>
@@ -461,7 +461,61 @@ export default function Home() {
                             </div>
                         )}
 
-                        <div className="mt-20 flex items-center justify-end gap-x-6">
+                        <p className="mt-20 text-gray-700 mb-1">
+                            <strong>
+                                IMPORTANT: When you click <em>Download Form</em>, you will then need to:
+                            </strong>
+                        </p>
+                        <ol className="text-sm mb-20 text-gray-700 list-decimal pl-5">
+                            {!fields.evidence && (
+                                <li>
+                                    <strong>
+                                        Select a form of evidence of your identity above, before you continue!
+                                    </strong>
+                                </li>
+                            )}
+                            {fields.evidence && (
+                                <>
+                                    {fields.evidence === 'photo_id' && (
+                                        <li>
+                                            Photograph your photo identification with NI Residential Address (eg.
+                                            Driver's License)
+                                        </li>
+                                    )}
+                                    {fields.evidence === 'utility_notice' && (
+                                        <>
+                                            <li>Photograph your Rates or Utility Notice</li>
+                                            <li>ATM Card, Medicare Card or Photo ID</li>
+                                        </>
+                                    )}
+                                    {fields.evidence === 'stat_dec' && (
+                                        <>
+                                            <li>
+                                                <Link
+                                                    href="/StatDec.pdf"
+                                                    download
+                                                    target="_blank"
+                                                    className="text-green-600 underline hover:no-underline"
+                                                >
+                                                    Download, print and fill out Statutory Declaration.
+                                                </Link>
+                                            </li>
+                                            <li>Photograph the Statutory Declaration</li>
+                                        </>
+                                    )}
+                                    <li>
+                                        <Link
+                                            className="text-green-600 underline hover:no-underline"
+                                            href={`mailto:norfolk.ro@austelect.com?subject=Enrolment%20Form&body=Hi%2C%0D%0A%0D%0APlease%20find%20attached%20my%20enrolment%20form%20and%20evidence%20of%20my%20identity!%0D%0A%0D%0AKind%20regards%2C%0D%0A${fields.current_given_name}%20${fields.current_family_name}`}
+                                        >
+                                            Send an email to norfolk.ro@austelect.com{' '}
+                                        </Link>{' '}
+                                        with the PDF of this form, and photograph evidence from above.
+                                    </li>
+                                </>
+                            )}
+                        </ol>
+                        <div className="flex items-center justify-end gap-x-6">
                             <button
                                 type="reset"
                                 className="text-sm font-semibold leading-6 text-gray-900"
@@ -469,7 +523,7 @@ export default function Home() {
                             >
                                 Reset
                             </button>
-                            <Button type="submit" disabled={submitting}>
+                            <Button type="submit" disabled={submitting || !fields.evidence}>
                                 {submitting ? 'Loading...' : 'Download Form'}
                             </Button>
                         </div>
