@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { FieldError } from '@/components/FieldError';
 import { useState } from 'react';
 
-interface ElectionFormInputs {
+export interface ElectionFormInputs {
     voting_method?: 'in_person' | 'online';
     title: 'Mr' | 'Mrs' | 'Ms' | 'Miss' | 'Dr' | 'Other';
     title_other?: string;
@@ -33,6 +33,7 @@ interface ElectionFormInputs {
 }
 
 export default function Home() {
+    const [submitting, setSubmitting] = useState<boolean>(false);
     const [serverError, setServerError] = useState<string>('');
     const {
         register,
@@ -51,7 +52,11 @@ export default function Home() {
     const fields = watch();
 
     const onSubmit: SubmitHandler<ElectionFormInputs> = async (data) => {
+        if (submitting) {
+            return;
+        }
         try {
+            setSubmitting(true);
             setServerError('');
             const response = await fetch('/api/genPDF', {
                 method: 'POST',
@@ -60,9 +65,24 @@ export default function Home() {
                 },
                 body: JSON.stringify(data),
             });
+            if (response.status !== 200) {
+                throw {
+                    status: response.status,
+                    message: (await response.json())?.error,
+                };
+            }
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank'; // Open in a new window
+            a.rel = 'noopener noreferrer'; // Recommended for security reasons when using _blank
+            a.click();
         } catch (e) {
             console.error(e);
             setServerError('An error occurred while generating your form. Please try again later.');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -403,10 +423,16 @@ export default function Home() {
                         )}
 
                         <div className="mt-6 flex items-center justify-end gap-x-6">
-                            <button type="reset" className="text-sm font-semibold leading-6 text-gray-900">
+                            <button
+                                type="reset"
+                                className="text-sm font-semibold leading-6 text-gray-900"
+                                disabled={submitting}
+                            >
                                 Reset
                             </button>
-                            <Button type="submit">Download Form</Button>
+                            <Button type="submit" disabled={submitting}>
+                                {submitting ? 'Loading...' : 'Download Form'}
+                            </Button>
                         </div>
                     </form>
                 </div>
