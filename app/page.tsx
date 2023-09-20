@@ -31,7 +31,12 @@ interface ElectionFormInputs {
 }
 
 export default function Home() {
-    const { register, handleSubmit, watch } = useForm<ElectionFormInputs>({
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<ElectionFormInputs>({
         defaultValues: {
             current_state: 'NSW',
             current_postcode: 2899,
@@ -80,12 +85,14 @@ export default function Home() {
                                                 label="I want to vote in-person by pre-poll or at the polling booth on election day"
                                                 {...register('voting_method', { required: true })}
                                                 value="in_person"
+                                                required
                                             />
                                             <RadioInput
                                                 id="online"
                                                 label="I want to vote online (current email address must be provided)"
                                                 {...register('voting_method', { required: true })}
                                                 value="online"
+                                                required
                                             />
                                         </fieldset>
                                     </div>
@@ -105,40 +112,48 @@ export default function Home() {
                                                     label="Mr"
                                                     {...register('title', { required: true })}
                                                     value="Mr"
+                                                    required
                                                 />
                                                 <RadioInput
                                                     id="mrs"
                                                     label="Mrs"
                                                     {...register('title', { required: true })}
                                                     value="Mrs"
+                                                    required
                                                 />
                                                 <RadioInput
                                                     id="ms"
                                                     label="Ms"
                                                     {...register('title', { required: true })}
                                                     value="Ms"
+                                                    required
                                                 />
                                                 <RadioInput
                                                     id="miss"
                                                     label="Miss"
                                                     {...register('title', { required: true })}
                                                     value="Miss"
+                                                    required
                                                 />
                                                 <RadioInput
                                                     id="dr"
                                                     label="Dr"
                                                     {...register('title', { required: true })}
                                                     value="Dr"
+                                                    required
                                                 />
                                                 <RadioInput
                                                     id="other"
                                                     label="Other"
                                                     {...register('title', { required: true })}
                                                     value="Other"
+                                                    required
                                                 />
                                                 <TextInput
                                                     placeholder="Other"
                                                     id="title_other"
+                                                    required={fields.title === 'Other'}
+                                                    errors={errors.title_other}
                                                     {...register('title_other', { required: fields.title === 'Other' })}
                                                 />
                                             </div>
@@ -150,6 +165,8 @@ export default function Home() {
                                         autoComplete="given-name"
                                         {...register('current_given_name')}
                                         className="sm:col-span-3"
+                                        required
+                                        errors={errors.current_given_name}
                                     />
                                     <TextInput
                                         id="family_name"
@@ -157,6 +174,8 @@ export default function Home() {
                                         autoComplete="family-name"
                                         {...register('current_family_name')}
                                         className="sm:col-span-3"
+                                        required
+                                        errors={errors.current_family_name}
                                     />
 
                                     <TextInput
@@ -164,12 +183,14 @@ export default function Home() {
                                         label="Previous Given name(s)"
                                         {...register('previous_given_name')}
                                         className="sm:col-span-3"
+                                        errors={errors.previous_given_name}
                                     />
                                     <TextInput
                                         id="previous_family_name"
                                         label="Previous Family name"
                                         {...register('previous_family_name')}
                                         className="sm:col-span-3"
+                                        errors={errors.previous_family_name}
                                     />
 
                                     <div className="col-span-2">
@@ -182,19 +203,25 @@ export default function Home() {
                                                     id="dob_day"
                                                     label="Day"
                                                     autoComplete="bday-day"
+                                                    required
                                                     {...register('dob_day', { required: true })}
+                                                    errors={errors.dob_day}
                                                 />
                                                 <TextInput
                                                     id="dob_month"
                                                     label="Month"
                                                     autoComplete="bday-month"
+                                                    required
                                                     {...register('dob_month', { required: true })}
+                                                    errors={errors.dob_month}
                                                 />
                                                 <TextInput
                                                     id="dob_year"
                                                     label="Year"
                                                     autoComplete="bday-year"
+                                                    required
                                                     {...register('dob_year', { required: true })}
+                                                    errors={errors.dob_year}
                                                 />
                                             </div>
                                         </fieldset>
@@ -210,6 +237,8 @@ export default function Home() {
                                         className="col-span-full"
                                         label="Current Address"
                                         autoComplete="street-address"
+                                        required
+                                        errors={errors.current_address_1}
                                         {...register('current_address_1', { required: true })}
                                     />
                                     <TextInput
@@ -217,6 +246,7 @@ export default function Home() {
                                         className="sm:col-span-2 sm:col-start-1"
                                         label="City"
                                         autoComplete="address-level2"
+                                        errors={errors.current_address_2}
                                         {...register('current_address_2')}
                                     />
                                     <TextInput
@@ -224,6 +254,8 @@ export default function Home() {
                                         className="sm:col-span-2"
                                         label="State"
                                         autoComplete="state"
+                                        required
+                                        errors={errors.current_state}
                                         {...register('current_state')}
                                     />
                                     <TextInput
@@ -231,6 +263,8 @@ export default function Home() {
                                         className="sm:col-span-2"
                                         label="Postcode"
                                         autoComplete="postal-code"
+                                        required
+                                        errors={errors.current_postcode}
                                         {...register('current_postcode')}
                                     />
 
@@ -239,6 +273,8 @@ export default function Home() {
                                         className="col-span-full"
                                         label="Current Postal Address"
                                         autoComplete="street-address"
+                                        required
+                                        errors={errors.current_postal_address_1}
                                         {...register('current_postal_address_1', { required: true })}
                                     />
                                     <TextInput
@@ -246,6 +282,7 @@ export default function Home() {
                                         className="sm:col-span-2 sm:col-start-1"
                                         label="City"
                                         autoComplete="address-level2"
+                                        errors={errors.current_postal_address_2}
                                         {...register('current_postal_address_2')}
                                     />
                                     <TextInput
@@ -253,6 +290,8 @@ export default function Home() {
                                         className="sm:col-span-2"
                                         label="State"
                                         autoComplete="state"
+                                        required
+                                        errors={errors.current_postal_address_state}
                                         {...register('current_postal_address_state')}
                                     />
                                     <TextInput
@@ -260,6 +299,8 @@ export default function Home() {
                                         className="sm:col-span-2"
                                         label="Postcode"
                                         autoComplete="postal-code"
+                                        required
+                                        errors={errors.current_postal_address_postcode}
                                         {...register('current_postal_address_postcode')}
                                     />
                                 </div>
@@ -273,6 +314,7 @@ export default function Home() {
                                         className="col-span-3"
                                         label="Mobile Phone"
                                         autoComplete="tel"
+                                        errors={errors.mobile}
                                         {...register('mobile')}
                                     />
                                     <TextInput
@@ -280,6 +322,7 @@ export default function Home() {
                                         type="tel"
                                         className="col-span-3"
                                         label="Daytime number"
+                                        errors={errors.daytime}
                                         {...register('daytime')}
                                     />
                                     <TextInput
@@ -288,7 +331,9 @@ export default function Home() {
                                         className="col-span-full"
                                         label="Email address"
                                         autoComplete="email"
-                                        {...register('email', { required: fields.title === 'Other' })}
+                                        errors={errors.email}
+                                        required={fields.voting_method === 'online'}
+                                        {...register('email', { required: fields.voting_method === 'online' })}
                                     />
                                 </div>
                             </div>
@@ -304,18 +349,21 @@ export default function Home() {
                                                 id="photo_id"
                                                 label="(a) Photo Identification with NI Residential Address"
                                                 {...register('evidence', { required: true })}
+                                                required
                                                 value="photo_id"
                                             />
                                             <RadioInput
                                                 id="utility_notice"
                                                 label="(b) Rates or Utility Notice, and ATM or Medicare Card or Photo ID"
                                                 {...register('evidence', { required: true })}
+                                                required
                                                 value="utility_notice"
                                             />
                                             <RadioInput
                                                 id="stat_dec"
                                                 label="A statutory declaration made by a person who can attest to the residential address, length of residency on Norfolk Island, and date of birth of the person who does not have the identification listed in (a) or (b) above."
                                                 {...register('evidence', { required: true })}
+                                                required
                                                 value="stat_dec"
                                             />
                                         </div>
