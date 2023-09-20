@@ -127,7 +127,7 @@ export async function POST(request: Request) {
                 status: 200,
                 headers: {
                     'Content-Type': `application/pdf`,
-                    'Content-Disposition': 'attachment; filename="Enrolment-Form-NIGC-2023.pdf',
+                    'Content-Disposition': 'inline; filename="Enrolment-Form-NIGC-2023.pdf',
                 },
             });
         } catch (e) {
