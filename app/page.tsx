@@ -479,7 +479,7 @@ export default function Home() {
                                     {fields.evidence === 'photo_id' && (
                                         <li>
                                             Photograph your photo identification with NI Residential Address (eg.
-                                            Driver's License)
+                                            Driver&apos;s License)
                                         </li>
                                     )}
                                     {fields.evidence === 'utility_notice' && (
